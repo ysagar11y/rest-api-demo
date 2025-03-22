@@ -89,7 +89,6 @@ public class UserServiceImple implements UserService {
         catch (Exception e) {
             log.error("Failed to update user: " + e.getMessage());
             throw new UserServiceIssue();
-
         }
     }
 
