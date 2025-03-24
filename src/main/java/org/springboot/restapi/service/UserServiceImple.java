@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springboot.restapi.dto.ApiResponseDto;
 import org.springboot.restapi.dto.ApiStatusDto;
 import org.springboot.restapi.dto.UserRegisterDto;
+import org.springboot.restapi.entity.Role;
 import org.springboot.restapi.entity.User;
 import org.springboot.restapi.exception.UserAlreadyExist;
 import org.springboot.restapi.exception.UserNotExist;
@@ -12,6 +13,7 @@ import org.springboot.restapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,14 @@ import java.util.List;
 @Service
 public class UserServiceImple implements UserService {
 
+
+
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
 
     @Override
     public ResponseEntity<ApiResponseDto<?>> registerUser(UserRegisterDto newUserDetails) throws UserAlreadyExist, UserServiceIssue {
@@ -39,9 +47,10 @@ public class UserServiceImple implements UserService {
             newUser.setEmail(newUserDetails.getEmail());
             newUser.setPhone(newUserDetails.getPhone());
             newUser.setUsername(newUserDetails.getUsername());
+            newUser.setPassword(passwordEncoder.encode(newUserDetails.getPassword()));
+            newUser.setRole(Role.USER);
             newUser.setRegDateAndTime(LocalDateTime.now());
 
-            // save() is an in built method given by JpaRepository
             userRepository.save(newUser);
 
             return ResponseEntity
@@ -79,6 +88,8 @@ public class UserServiceImple implements UserService {
             user.setEmail(newUserDetails.getEmail());
             user.setPhone(newUserDetails.getPhone());
             user.setUsername(newUserDetails.getUsername());
+            user.setPassword(newUserDetails.getPassword());
+            user.setRole(Role.USER);
             user.setRegDateAndTime(LocalDateTime.now());
             userRepository.save(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponseDto<>(ApiStatusDto.SUCCESS.name(),user));

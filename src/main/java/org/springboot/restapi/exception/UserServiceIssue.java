@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
-public class UserServiceIssue extends RuntimeException {
+public class
+UserServiceIssue extends RuntimeException {
     public UserServiceIssue() {
         super("Service issue occurred");
     }

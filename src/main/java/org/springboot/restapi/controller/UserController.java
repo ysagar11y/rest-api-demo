@@ -1,6 +1,7 @@
 package org.springboot.restapi.controller;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springboot.restapi.dto.ApiResponseDto;
 import org.springboot.restapi.dto.ApiStatusDto;
 import org.springboot.restapi.dto.UserRegisterDto;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -21,6 +23,7 @@ public class UserController {
 
     @PostMapping("/new")
     public ResponseEntity<ApiResponseDto<?>> registerUser(@Valid @RequestBody UserRegisterDto user) throws UserAlreadyExist, UserServiceIssue {
+        log.info("Received user registration request: {}", user);
         userService.registerUser(user);
         return ResponseEntity.ok().body(new ApiResponseDto<>(ApiStatusDto.SUCCESS.name(),user+"got registered successfully"));
     }

@@ -12,21 +12,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(min=3, max = 20)
+
     private String username;
-
-    @NotBlank
-    @Email
     private String email;
-
-    @NotBlank
-    @Size(min=10, max = 10)
     private String phone;
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
 
     private LocalDateTime regDateAndTime;
 
